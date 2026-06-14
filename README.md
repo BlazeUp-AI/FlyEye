@@ -1,6 +1,6 @@
-# ExterVision
+# FlyEye
 
-ExterVision is an AI QA loop for production web apps. It pulls replay evidence from PostHog, turns that evidence into structured bug and UX findings with OpenAI, stores the findings in Supabase, and can optionally create scoped GitHub pull requests for high-confidence issues.
+FlyEye is an AI QA loop for production web apps. It pulls replay evidence from PostHog, turns that evidence into structured bug and UX findings with OpenAI, stores the findings in Supabase, and can optionally create scoped GitHub pull requests for high-confidence issues.
 
 The current product analyzes session telemetry such as page views, clicks, rage clicks, dead clicks, console errors, network failures, and custom events. It does not yet send raw replay video or visual frames to the model.
 
@@ -255,7 +255,7 @@ bun lint     # run ESLint
 
 ## License
 
-ExterVision is licensed under the GNU Affero General Public License v3.0.
+FlyEye is licensed under the GNU Affero General Public License v3.0.
 
 ```text
 SPDX-License-Identifier: AGPL-3.0-only

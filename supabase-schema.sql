@@ -1,4 +1,4 @@
--- FlyVision Database Schema
+-- FlyEye Database Schema
 -- Run this in your Supabase SQL Editor
 
 -- Projects

@@ -37,7 +37,7 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
       </Link>
 
       <PageHeader
-        eyebrow={`ExterVision / Loop EV-${issue.id.slice(0, 4)}`}
+        eyebrow={`FlyEye / Loop EV-${issue.id.slice(0, 4)}`}
         title="Loop detail"
         description="Evidence, diagnosis, team feedback, generated fix, and memory update in one review surface."
       />
@@ -83,7 +83,7 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
             <Panel>
               <PanelHeader label="Diagnosis" value="Root cause" />
               <div className="space-y-4 p-4">
-                <DetailBlock title="Root cause">{issue.root_cause || 'ExterVision has not produced a root cause yet.'}</DetailBlock>
+                <DetailBlock title="Root cause">{issue.root_cause || 'FlyEye has not produced a root cause yet.'}</DetailBlock>
                 <DetailBlock title="Reproduction">{issue.reproduction_steps || 'No reproduction steps captured yet.'}</DetailBlock>
               </div>
             </Panel>
@@ -113,7 +113,7 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
 
         <aside className="grid content-start gap-3">
           <Panel>
-            <PanelHeader label="Teach ExterVision" value={feedbackGiven ? 'recorded' : 'needed'} />
+            <PanelHeader label="Teach FlyEye" value={feedbackGiven ? 'recorded' : 'needed'} />
             <div className="p-4">
               {!feedbackGiven ? (
                 <>
@@ -138,7 +138,7 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
                   </div>
                 </>
               ) : (
-                <p className="text-sm leading-6 text-[var(--ev-muted)]">Feedback recorded. ExterVision will use this loop as memory for future detections.</p>
+                <p className="text-sm leading-6 text-[var(--ev-muted)]">Feedback recorded. FlyEye will use this loop as memory for future detections.</p>
               )}
 
               {!prUrl && (
@@ -160,7 +160,7 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
                 Memory ledger
               </h2>
               <p className="mt-3 text-sm leading-6 text-[var(--ev-muted)]">
-                This loop should update ExterVision&apos;s future thresholds after team review.
+                This loop should update FlyEye&apos;s future thresholds after team review.
               </p>
             </div>
             <div className="divide-y divide-[var(--ev-border)] border-t border-[var(--ev-border)]">

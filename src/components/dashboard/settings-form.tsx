@@ -53,7 +53,7 @@ export function SettingsForm({ userId, project }: { userId: string; project: Exi
   return (
     <div className="pt-20 lg:pt-0">
       <PageHeader
-        eyebrow="ExterVision / Settings"
+        eyebrow="FlyEye / Settings"
         title="Source wiring"
         description="Connect the services that power the loop: replay evidence from PostHog, code context from GitHub, and model execution through OpenAI."
       />
@@ -123,7 +123,7 @@ export function SettingsForm({ userId, project }: { userId: string; project: Exi
               Loop readiness
             </h2>
             <p className="mt-3 text-sm leading-6 text-[var(--ev-muted)]">
-              ExterVision needs replay evidence, code access, and model execution before it can close loops.
+              FlyEye needs replay evidence, code access, and model execution before it can close loops.
             </p>
           </div>
           <div className="divide-y divide-[var(--ev-border)] border-t border-[var(--ev-border)]">

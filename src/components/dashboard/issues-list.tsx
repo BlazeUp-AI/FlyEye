@@ -9,7 +9,7 @@ export function IssuesList({ issues }: { issues: Issue[] }) {
   return (
     <div className="pt-20 lg:pt-0">
       <PageHeader
-        eyebrow="ExterVision / Loops"
+        eyebrow="FlyEye / Loops"
         title="Loop archive"
         description="Replay-backed product quality loops with severity, confidence, PR readiness, and learned team policy."
       />

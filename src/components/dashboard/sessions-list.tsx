@@ -18,15 +18,15 @@ export function SessionsList({ sessions }: { sessions: Session[]; projectId: str
   return (
     <div className="pt-20 lg:pt-0">
       <PageHeader
-        eyebrow="ExterVision / Replays"
+        eyebrow="FlyEye / Replays"
         title="Replay evidence"
-        description="Raw PostHog sessions that can become loops when ExterVision sees blocked flows, errors, rage clicks, or team-defined signals."
+        description="Raw PostHog sessions that can become loops when FlyEye sees blocked flows, errors, rage clicks, or team-defined signals."
       />
 
       {sessions.length === 0 ? (
         <EmptyState
           title="No replays synced"
-          description="Sync PostHog sessions from the inbox. Replays become evidence once ExterVision analyzes the session stream."
+          description="Sync PostHog sessions from the inbox. Replays become evidence once FlyEye analyzes the session stream."
         />
       ) : (
         <Panel>

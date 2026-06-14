@@ -24,8 +24,8 @@ const sourceSerif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "ExterVision — Closed-loop product quality",
-  description: "Connect PostHog. ExterVision watches replays, learns from feedback, and opens PRs.",
+  title: "FlyEye — Closed-loop product quality",
+  description: "Connect PostHog. FlyEye watches replays, learns from feedback, and opens PRs.",
 };
 
 export default function RootLayout({

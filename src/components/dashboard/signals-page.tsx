@@ -36,9 +36,9 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
   return (
     <div className="pt-20 lg:pt-0">
       <PageHeader
-        eyebrow="ExterVision / Learnings"
+        eyebrow="FlyEye / Learnings"
         title="Learning rules"
-        description="Team-defined signals and feedback patterns that teach ExterVision what product failures matter."
+        description="Team-defined signals and feedback patterns that teach FlyEye what product failures matter."
         action={
           <button
             onClick={() => setShowForm(!showForm)}
@@ -59,7 +59,7 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
             placeholder="Checkout abandonment"
           />
           <div>
-            <label className="mb-1.5 block font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">What ExterVision should watch for</label>
+            <label className="mb-1.5 block font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">What FlyEye should watch for</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
@@ -91,7 +91,7 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
       {signals.length === 0 ? (
         <EmptyState
           title="No learning rules"
-          description="Create a signal to teach ExterVision what to watch for in replay evidence."
+          description="Create a signal to teach FlyEye what to watch for in replay evidence."
         />
       ) : (
         <Panel>

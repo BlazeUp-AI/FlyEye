@@ -61,7 +61,7 @@ export function DashboardOverview({
   return (
     <div className="pt-20 lg:pt-0">
       <PageHeader
-        eyebrow="ExterVision / Loop inbox"
+        eyebrow="FlyEye / Loop inbox"
         title="Loop inbox"
         description={setupMode
           ? 'Connect PostHog, GitHub, and OpenAI to start turning replay evidence into loops.'
@@ -200,7 +200,7 @@ export function DashboardOverview({
         ) : (
           <EmptyState
             title="No loops detected yet"
-            description="Sync PostHog sessions and run analysis. ExterVision will turn replay evidence into diagnosis, feedback, PRs, and memory updates."
+            description="Sync PostHog sessions and run analysis. FlyEye will turn replay evidence into diagnosis, feedback, PRs, and memory updates."
           />
         )
       )}
@@ -237,7 +237,7 @@ function SetupGuide() {
           <p className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">No project connected</p>
           <h2 className="mt-3 text-2xl font-semibold tracking-normal text-[var(--ev-text)]">Connect real sources to start.</h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--ev-muted)]">
-            ExterVision only shows loops after it can read actual replay evidence, run diagnosis, and open code changes in your repository.
+            FlyEye only shows loops after it can read actual replay evidence, run diagnosis, and open code changes in your repository.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -313,7 +313,7 @@ function LoopRow({ issue }: { issue: Issue }) {
 function MemoryLedger() {
   const entries = [
     ['Rule updated', 'Disabled checkout buttons after failed network requests are now revenue-blocking, not UI polish.'],
-    ['Feedback applied', 'QA requires two-session repro before ExterVision opens PRs touching payments.'],
+    ['Feedback applied', 'QA requires two-session repro before FlyEye opens PRs touching payments.'],
     ['Regression watch', 'Promo retry, payment intent recovery, and abandon rate are watched after merge.'],
     ['Trust control', 'Auth, billing, and deletion fixes require engineering approval before auto-merge.'],
   ]
@@ -325,7 +325,7 @@ function MemoryLedger() {
           Memory ledger
         </h2>
         <p className="mt-3 text-sm leading-6 text-[var(--ev-muted)]">
-          ExterVision should expose how PM, QA, and engineering feedback changes future classifications.
+          FlyEye should expose how PM, QA, and engineering feedback changes future classifications.
         </p>
       </div>
       <div className="divide-y divide-[var(--ev-border)] border-t border-[var(--ev-border)]">

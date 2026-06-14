@@ -18,7 +18,7 @@ const workflow = [
   {
     icon: Brain,
     title: 'Understand what broke',
-    copy: 'ExterVision groups repeat failures, explains the likely cause, and shows why the issue matters.',
+    copy: 'FlyEye groups repeat failures, explains the likely cause, and shows why the issue matters.',
   },
   {
     icon: GitPullRequest,
@@ -37,13 +37,14 @@ const details = [
 const pricing = [
   {
     name: 'Starter',
-    price: '$399',
+    originalPrice: '$399',
+    price: '$99',
     detail: 'For one product team wiring its first quality loop.',
     features: ['10,000 sessions / month', '3 active signals', '3 custom filters', '30-day retention', 'All integrations', 'MCP and SDK access'],
   },
   {
     name: 'Pro',
-    price: '$799',
+    price: '$299',
     detail: 'For PM, QA, and engineering teams closing the loop together.',
     badge: 'Most popular',
     features: ['30,000 sessions / month', 'Unlimited signals', 'Unlimited filters', '90-day retention', 'Priority processing', 'Multi-project support'],
@@ -69,7 +70,7 @@ export default function LandingPage() {
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/[0.07] bg-[#090a08]/82 backdrop-blur-xl">
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
           <Link href="/" className="text-base font-semibold tracking-normal text-white">
-            ExterVision
+            FlyEye
           </Link>
           <div className="hidden items-center gap-7 text-sm text-[var(--ev-muted)] md:flex">
             <a href="#loop" className="transition-colors hover:text-white">Loop</a>
@@ -100,10 +101,10 @@ export default function LandingPage() {
               Closed-loop product quality
             </div>
             <h1 className="text-5xl font-semibold leading-[0.95] tracking-normal text-white md:text-7xl">
-              ExterVision
+              FlyEye
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-8 text-[#d9d5cc] md:text-xl">
-              Connect PostHog and GitHub. ExterVision finds real product issues from user sessions and turns them into fix-ready PRs.
+              Connect PostHog and GitHub. FlyEye finds real product issues from user sessions and turns them into fix-ready PRs.
             </p>
             <div className="mt-6 grid gap-2 text-sm leading-6 text-[var(--ev-muted)]">
               <p><span className="text-white">For PM:</span> see what users failed to do.</p>
@@ -186,7 +187,7 @@ export default function LandingPage() {
               Your feedback changes the next run.
             </h2>
             <p className="mt-5 max-w-xl text-sm leading-7 text-[var(--ev-muted)]">
-              Confirm a bug, reject a weak signal, or edit the fix direction. ExterVision uses that feedback when it reviews the next batch of sessions.
+              Confirm a bug, reject a weak signal, or edit the fix direction. FlyEye uses that feedback when it reviews the next batch of sessions.
             </p>
           </div>
           <div className="grid gap-3">
@@ -218,7 +219,12 @@ export default function LandingPage() {
                   </span>
                 )}
                 <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
-                <div className="mt-5 flex items-end gap-1">
+                <div className="mt-5 flex flex-wrap items-end gap-x-2 gap-y-1">
+                  {'originalPrice' in plan && plan.originalPrice && (
+                    <span className="pb-1 text-lg font-medium tracking-normal text-[var(--ev-faint)] line-through">
+                      {plan.originalPrice}
+                    </span>
+                  )}
                   <span className="text-4xl font-semibold tracking-normal text-white">{plan.price}</span>
                   {plan.price !== 'Custom' && <span className="pb-1 text-sm text-[var(--ev-muted)]">/mo</span>}
                 </div>
@@ -246,7 +252,7 @@ export default function LandingPage() {
 
       <footer className="border-t border-white/[0.07] px-5 py-8 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-[var(--ev-muted)] md:flex-row md:items-center md:justify-between">
-          <span className="font-semibold text-white">ExterVision</span>
+          <span className="font-semibold text-white">FlyEye</span>
           <span>Closed-loop product quality for PM, QA, and engineering teams.</span>
         </div>
       </footer>
