@@ -26,9 +26,9 @@ export async function POST(
     return Response.json({ error: 'GitHub not configured' }, { status: 400 })
   }
 
-  const anthropicKey = decrypt(project.anthropic_api_key)
+  const openaiKey = decrypt(project.openai_api_key)
   const githubToken = decrypt(project.github_token)
-  const fixer = new CodeFixer(anthropicKey, githubToken, project.github_repo)
+  const fixer = new CodeFixer(openaiKey, githubToken, project.github_repo)
 
   const prUrl = await fixer.fixAndPush(issue)
 

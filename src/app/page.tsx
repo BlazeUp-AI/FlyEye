@@ -57,7 +57,7 @@ export default function LandingPage() {
               number="2"
               icon={Brain}
               title="AI watches 24/7"
-              description="Claude analyzes every session — detects bugs, UX issues, errors, and rage clicks."
+              description="GPT-5.5 analyzes every session — detects bugs, UX issues, errors, and rage clicks."
             />
             <Step
               number="3"
@@ -102,7 +102,7 @@ export default function LandingPage() {
       <section className="py-20 px-6 border-t border-zinc-800/50">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Ready to stop hunting bugs manually?</h2>
-          <p className="text-zinc-400 mb-8">Bring your PostHog + Anthropic + GitHub keys. FlyVision does the rest.</p>
+          <p className="text-zinc-400 mb-8">Bring your PostHog + OpenAI + GitHub keys. FlyVision does the rest.</p>
           <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors">
             Get Started
             <ArrowRight size={16} />

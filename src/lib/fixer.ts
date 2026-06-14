@@ -1,13 +1,13 @@
-import Anthropic from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
 import { GitHubClient } from './github'
 import type { Issue } from './types'
 
 export class CodeFixer {
-  private ai: Anthropic
+  private ai: OpenAI
   private github: GitHubClient
 
-  constructor(anthropicKey: string, githubToken: string, githubRepo: string) {
-    this.ai = new Anthropic({ apiKey: anthropicKey })
+  constructor(openaiKey: string, githubToken: string, githubRepo: string) {
+    this.ai = new OpenAI({ apiKey: openaiKey })
     this.github = new GitHubClient(githubToken, githubRepo)
   }
 
@@ -58,12 +58,14 @@ export class CodeFixer {
       .map(([path, content]) => `### ${path}\n\`\`\`\n${content}\n\`\`\``)
       .join('\n\n')
 
-    const response = await this.ai.messages.create({
-      model: 'claude-sonnet-4-20250514',
+    const response = await this.ai.chat.completions.create({
+      model: 'gpt-5.5',
       max_tokens: 8192,
-      messages: [{
-        role: 'user',
-        content: `# Bug Fix Request
+      messages: [
+        { role: 'system', content: 'You are a senior software engineer fixing a bug detected in production. Write minimal, correct fixes. Return only valid JSON.' },
+        {
+          role: 'user',
+          content: `# Bug Fix Request
 
 ## Issue
 - **Title:** ${issue.title}
@@ -90,14 +92,11 @@ Generate the minimal fix for this bug. Return JSON with the files to change:
 }
 
 Only include files that need changes. Write the COMPLETE file content (not a diff). If you cannot determine a confident fix, return {"changes": []}.`,
-      }],
-      system: 'You are a senior software engineer fixing a bug detected in production. Write minimal, correct fixes. Return only valid JSON.',
+        },
+      ],
     })
 
-    const text = response.content
-      .filter(block => block.type === 'text')
-      .map(block => block.text)
-      .join('')
+    const text = response.choices[0]?.message?.content ?? ''
 
     const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) return null

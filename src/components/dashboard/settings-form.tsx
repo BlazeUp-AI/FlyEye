@@ -15,7 +15,7 @@ export function SettingsForm({ userId, project }: { userId: string; project: Exi
   const [name, setName] = useState(project?.name ?? '')
   const [posthogKey, setPosthogKey] = useState('')
   const [posthogProjectId, setPosthogProjectId] = useState(project?.posthog_project_id ?? '')
-  const [anthropicKey, setAnthropicKey] = useState('')
+  const [openaiKey, setOpenAIKey] = useState('')
   const [githubToken, setGithubToken] = useState('')
   const [githubRepo, setGithubRepo] = useState(project?.github_repo ?? '')
   const [saving, setSaving] = useState(false)
@@ -33,7 +33,7 @@ export function SettingsForm({ userId, project }: { userId: string; project: Exi
       github_repo: githubRepo,
     }
     if (posthogKey) body.posthog_api_key = posthogKey
-    if (anthropicKey) body.anthropic_api_key = anthropicKey
+    if (openaiKey) body.openai_api_key = openaiKey
     if (githubToken) body.github_token = githubToken
     if (project?.id) body.projectId = project.id
 
@@ -76,12 +76,12 @@ export function SettingsForm({ userId, project }: { userId: string; project: Exi
         </div>
 
         <div className="border-t border-zinc-800 pt-6">
-          <h2 className="text-sm font-medium text-white mb-4">Anthropic</h2>
+          <h2 className="text-sm font-medium text-white mb-4">OpenAI</h2>
           <Field
             label="API Key"
-            value={anthropicKey}
-            onChange={setAnthropicKey}
-            placeholder={project ? '••••••••  (already set)' : 'sk-ant-...'}
+            value={openaiKey}
+            onChange={setOpenAIKey}
+            placeholder={project ? '••••••••  (already set)' : 'sk-...'}
             type="password"
           />
         </div>

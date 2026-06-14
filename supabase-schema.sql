@@ -8,7 +8,7 @@ create table if not exists projects (
   name text not null default 'My Project',
   posthog_api_key text,
   posthog_project_id text,
-  anthropic_api_key text,
+  openai_api_key text,
   github_token text,
   github_repo text,
   sync_enabled boolean default true,

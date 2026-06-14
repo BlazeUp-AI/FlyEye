@@ -1,27 +1,26 @@
-import Anthropic from '@anthropic-ai/sdk'
-import type { Session, AnalysisResult, Finding, PromptExample } from './types'
+import OpenAI from 'openai'
+import type { Session, AnalysisResult, PromptExample } from './types'
 
 export class SessionAnalyzer {
-  private client: Anthropic
+  private client: OpenAI
 
   constructor(apiKey: string) {
-    this.client = new Anthropic({ apiKey })
+    this.client = new OpenAI({ apiKey })
   }
 
   async analyze(session: Session, examples: PromptExample[] = []): Promise<AnalysisResult> {
     const prompt = this.buildPrompt(session, examples)
 
-    const response = await this.client.messages.create({
-      model: 'claude-sonnet-4-20250514',
+    const response = await this.client.chat.completions.create({
+      model: 'gpt-5.5',
       max_tokens: 4096,
-      messages: [{ role: 'user', content: prompt }],
-      system: `You are an expert QA engineer analyzing user session recordings to detect bugs, UX issues, and errors. You are thorough, precise, and only flag real issues — not minor inconveniences. Return your findings as valid JSON.`,
+      messages: [
+        { role: 'system', content: 'You are an expert QA engineer analyzing user session recordings to detect bugs, UX issues, and errors. You are thorough, precise, and only flag real issues — not minor inconveniences. Return your findings as valid JSON.' },
+        { role: 'user', content: prompt },
+      ],
     })
 
-    const text = response.content
-      .filter(block => block.type === 'text')
-      .map(block => block.text)
-      .join('')
+    const text = response.choices[0]?.message?.content ?? ''
 
     const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) return { findings: [] }

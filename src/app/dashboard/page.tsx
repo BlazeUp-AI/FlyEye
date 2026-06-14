@@ -1,4 +1,4 @@
-import { createServerSupabase } from '@/lib/supabase/server'
+import { createServerSupabase, createServiceSupabase } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { DashboardOverview } from '@/components/dashboard/overview'
 
@@ -7,7 +7,9 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: projects } = await supabase
+  const db = createServiceSupabase()
+
+  const { data: projects } = await db
     .from('projects')
     .select('*')
     .eq('user_id', user.id)
@@ -19,14 +21,14 @@ export default async function DashboardPage() {
     redirect('/dashboard/settings')
   }
 
-  const { data: issues } = await supabase
+  const { data: issues } = await db
     .from('issues')
     .select('*')
     .eq('project_id', project.id)
     .order('created_at', { ascending: false })
     .limit(20)
 
-  const { data: sessions } = await supabase
+  const { data: sessions } = await db
     .from('sessions')
     .select('id, analysis_status')
     .eq('project_id', project.id)

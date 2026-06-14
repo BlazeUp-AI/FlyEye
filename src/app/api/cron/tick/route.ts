@@ -27,7 +27,7 @@ export async function GET(request: Request) {
   for (const project of projects) {
     try {
       const posthogKey = decrypt(project.posthog_api_key)
-      const anthropicKey = decrypt(project.anthropic_api_key)
+      const openaiKey = decrypt(project.openai_api_key)
       const client = new PostHogClient(posthogKey, project.posthog_project_id)
 
       // Sync
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
         continue
       }
 
-      const analyzer = new SessionAnalyzer(anthropicKey)
+      const analyzer = new SessionAnalyzer(openaiKey)
       const examples = await getExamplesForProject(project.id)
       let totalIssues = 0
 
@@ -93,7 +93,7 @@ export async function GET(request: Request) {
 
           if (project.github_token && project.github_repo && inserted) {
             const githubToken = decrypt(project.github_token)
-            const fixer = new CodeFixer(anthropicKey, githubToken, project.github_repo)
+            const fixer = new CodeFixer(openaiKey, githubToken, project.github_repo)
 
             for (const issue of inserted) {
               if (issue.confidence >= 0.8 && (issue.severity === 'critical' || issue.severity === 'high')) {

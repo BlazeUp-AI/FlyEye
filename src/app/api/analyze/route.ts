@@ -32,8 +32,8 @@ export async function POST(request: Request) {
     return Response.json({ analyzed: 0, issues: 0 })
   }
 
-  const anthropicKey = decrypt(project.anthropic_api_key)
-  const analyzer = new SessionAnalyzer(anthropicKey)
+  const openaiKey = decrypt(project.openai_api_key)
+  const analyzer = new SessionAnalyzer(openaiKey)
   const examples = await getExamplesForProject(projectId)
 
   let totalIssues = 0
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
       if (project.github_token && project.github_repo && insertedIssues) {
         const githubToken = decrypt(project.github_token)
-        const fixer = new CodeFixer(anthropicKey, githubToken, project.github_repo)
+        const fixer = new CodeFixer(openaiKey, githubToken, project.github_repo)
 
         for (const issue of insertedIssues) {
           if (issue.confidence >= 0.8 && (issue.severity === 'critical' || issue.severity === 'high')) {

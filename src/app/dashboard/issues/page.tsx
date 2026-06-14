@@ -1,4 +1,4 @@
-import { createServerSupabase } from '@/lib/supabase/server'
+import { createServerSupabase, createServiceSupabase } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { IssuesList } from '@/components/dashboard/issues-list'
 
@@ -7,7 +7,9 @@ export default async function IssuesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: projects } = await supabase
+  const db = createServiceSupabase()
+
+  const { data: projects } = await db
     .from('projects')
     .select('id')
     .eq('user_id', user.id)
@@ -16,7 +18,7 @@ export default async function IssuesPage() {
   const project = projects?.[0]
   if (!project) redirect('/dashboard/settings')
 
-  const { data: issues } = await supabase
+  const { data: issues } = await db
     .from('issues')
     .select('*')
     .eq('project_id', project.id)

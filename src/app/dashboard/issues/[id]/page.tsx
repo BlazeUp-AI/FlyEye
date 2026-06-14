@@ -1,4 +1,4 @@
-import { createServerSupabase } from '@/lib/supabase/server'
+import { createServerSupabase, createServiceSupabase } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { IssueDetail } from '@/components/dashboard/issue-detail'
 
@@ -8,7 +8,9 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ id
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: issue } = await supabase
+  const db = createServiceSupabase()
+
+  const { data: issue } = await db
     .from('issues')
     .select('*, issue_feedback(*)')
     .eq('id', id)
@@ -16,7 +18,7 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ id
 
   if (!issue) redirect('/dashboard/issues')
 
-  const { data: project } = await supabase
+  const { data: project } = await db
     .from('projects')
     .select('id')
     .eq('id', issue.project_id)

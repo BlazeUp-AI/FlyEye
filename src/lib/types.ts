@@ -4,7 +4,7 @@ export type Project = {
   name: string
   posthog_api_key: string
   posthog_project_id: string
-  anthropic_api_key: string
+  openai_api_key: string
   github_token: string
   github_repo: string
   sync_enabled: boolean

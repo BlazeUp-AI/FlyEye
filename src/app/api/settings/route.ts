@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { projectId, name, posthog_api_key, posthog_project_id, anthropic_api_key, github_token, github_repo } = body
+  const { projectId, name, posthog_api_key, posthog_project_id, openai_api_key, github_token, github_repo } = body
 
   const update: Record<string, unknown> = {
     name: name || 'My Project',
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   }
 
   if (posthog_api_key) update.posthog_api_key = encrypt(posthog_api_key)
-  if (anthropic_api_key) update.anthropic_api_key = encrypt(anthropic_api_key)
+  if (openai_api_key) update.openai_api_key = encrypt(openai_api_key)
   if (github_token) update.github_token = encrypt(github_token)
 
   if (projectId) {
