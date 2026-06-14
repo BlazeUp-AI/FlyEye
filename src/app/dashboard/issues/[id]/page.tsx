@@ -1,6 +1,7 @@
 import { createServerSupabase, createServiceSupabase } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { IssueDetail } from '@/components/dashboard/issue-detail'
+import { getDemoIssueById } from '@/lib/demo-data'
 
 export default async function IssueDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -16,7 +17,11 @@ export default async function IssueDetailPage({ params }: { params: Promise<{ id
     .eq('id', id)
     .single()
 
-  if (!issue) redirect('/dashboard/issues')
+  if (!issue) {
+    const demoIssue = getDemoIssueById(id)
+    if (demoIssue) return <IssueDetail issue={demoIssue} demoMode />
+    redirect('/dashboard/issues')
+  }
 
   const { data: project } = await db
     .from('projects')

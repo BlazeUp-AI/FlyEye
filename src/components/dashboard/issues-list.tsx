@@ -5,13 +5,14 @@ import type { Issue } from '@/lib/types'
 import Link from 'next/link'
 import { EmptyState, PageHeader, Panel, PanelHeader, Pill, severityTone, statusTone } from '@/components/dashboard/ui'
 
-export function IssuesList({ issues }: { issues: Issue[] }) {
+export function IssuesList({ issues, demoMode = false }: { issues: Issue[]; demoMode?: boolean }) {
   return (
     <div className="pt-20 lg:pt-0">
       <PageHeader
         eyebrow="FlyEye / Loops"
         title="Loop archive"
         description="Replay-backed product quality loops with severity, confidence, PR readiness, and learned team policy."
+        action={demoMode ? <Pill tone="accent">Demo data</Pill> : undefined}
       />
 
       {issues.length === 0 ? (

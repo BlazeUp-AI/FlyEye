@@ -1,6 +1,7 @@
 import { createServerSupabase, createServiceSupabase } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { IssuesList } from '@/components/dashboard/issues-list'
+import { demoIssues } from '@/lib/demo-data'
 
 export default async function IssuesPage() {
   const supabase = await createServerSupabase()
@@ -16,7 +17,7 @@ export default async function IssuesPage() {
     .limit(1)
 
   const project = projects?.[0]
-  if (!project) redirect('/dashboard/settings')
+  if (!project) return <IssuesList issues={demoIssues} demoMode />
 
   const { data: issues } = await db
     .from('issues')
@@ -25,5 +26,6 @@ export default async function IssuesPage() {
     .order('created_at', { ascending: false })
     .limit(50)
 
-  return <IssuesList issues={issues ?? []} />
+  const realIssues = issues ?? []
+  return <IssuesList issues={realIssues.length > 0 ? realIssues : demoIssues} demoMode={realIssues.length === 0} />
 }

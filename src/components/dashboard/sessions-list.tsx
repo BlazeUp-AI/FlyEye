@@ -5,10 +5,11 @@ import { AlertCircle, Clock, Monitor, Play } from 'lucide-react'
 import type { Session } from '@/lib/types'
 import { EmptyState, PageHeader, Panel, PanelHeader, Pill, statusTone } from '@/components/dashboard/ui'
 
-export function SessionsList({ sessions }: { sessions: Session[]; projectId: string }) {
+export function SessionsList({ sessions, demoMode = false }: { sessions: Session[]; projectId: string; demoMode?: boolean }) {
   const [analyzingId, setAnalyzingId] = useState<string | null>(null)
 
   async function analyzeSession(sessionId: string) {
+    if (demoMode) return
     setAnalyzingId(sessionId)
     await fetch(`/api/analyze/${sessionId}`, { method: 'POST' })
     setAnalyzingId(null)
@@ -21,6 +22,7 @@ export function SessionsList({ sessions }: { sessions: Session[]; projectId: str
         eyebrow="FlyEye / Replays"
         title="Replay evidence"
         description="Raw PostHog sessions that can become loops when FlyEye sees blocked flows, errors, rage clicks, or team-defined signals."
+        action={demoMode ? <Pill tone="accent">Demo data</Pill> : undefined}
       />
 
       {sessions.length === 0 ? (
@@ -63,7 +65,7 @@ export function SessionsList({ sessions }: { sessions: Session[]; projectId: str
                   {(session.event_summary?.dead_clicks ?? 0)} dead clicks
                 </span>
                 <Pill tone={statusTone(session.analysis_status)}>{session.analysis_status}</Pill>
-                {session.analysis_status === 'pending' ? (
+                {session.analysis_status === 'pending' && !demoMode ? (
                   <button
                     onClick={() => analyzeSession(session.id)}
                     disabled={analyzingId === session.id}
@@ -73,7 +75,7 @@ export function SessionsList({ sessions }: { sessions: Session[]; projectId: str
                     {analyzingId === session.id ? 'Analyzing' : 'Analyze'}
                   </button>
                 ) : (
-                  <span className="font-data text-xs uppercase tracking-normal text-[var(--ev-faint)]">Evidence</span>
+                  <span className="font-data text-xs uppercase tracking-normal text-[var(--ev-faint)]">{demoMode ? 'Sample' : 'Evidence'}</span>
                 )}
               </div>
             ))}

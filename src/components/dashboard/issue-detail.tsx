@@ -7,12 +7,22 @@ import type { Issue } from '@/lib/types'
 import Link from 'next/link'
 import { PageHeader, Panel, PanelHeader, Pill, severityTone, statusTone } from '@/components/dashboard/ui'
 
-export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verdict: string }[] } }) {
+export function IssueDetail({
+  issue,
+  demoMode = false,
+}: {
+  issue: Issue & { issue_feedback: { verdict: string }[] }
+  demoMode?: boolean
+}) {
   const [feedbackGiven, setFeedbackGiven] = useState(issue.issue_feedback?.length > 0)
   const [fixing, setFixing] = useState(false)
   const [prUrl, setPrUrl] = useState(issue.pr_url)
 
   async function submitFeedback(verdict: 'confirmed' | 'rejected') {
+    if (demoMode) {
+      setFeedbackGiven(true)
+      return
+    }
     await fetch(`/api/issues/${issue.id}/feedback`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -23,6 +33,11 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
 
   async function triggerFix() {
     setFixing(true)
+    if (demoMode) {
+      setPrUrl(issue.pr_url ?? 'https://github.com/BlazeUp-AI/FlyEye/pull/128')
+      setFixing(false)
+      return
+    }
     const res = await fetch(`/api/fix/${issue.id}`, { method: 'POST' })
     const data = await res.json()
     if (data.pr_url) setPrUrl(data.pr_url)
@@ -40,6 +55,7 @@ export function IssueDetail({ issue }: { issue: Issue & { issue_feedback: { verd
         eyebrow={`FlyEye / Loop EV-${issue.id.slice(0, 4)}`}
         title="Loop detail"
         description="Evidence, diagnosis, team feedback, generated fix, and memory update in one review surface."
+        action={demoMode ? <Pill tone="accent">Demo data</Pill> : undefined}
       />
 
       <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_360px]">

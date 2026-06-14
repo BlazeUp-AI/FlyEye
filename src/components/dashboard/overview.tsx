@@ -20,11 +20,13 @@ export function DashboardOverview({
   recentIssues,
   projectId,
   setupMode = false,
+  demoMode = false,
 }: {
   stats: Stats
   recentIssues: Issue[]
   projectId: string
   setupMode?: boolean
+  demoMode?: boolean
 }) {
   const [syncing, setSyncing] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
@@ -67,9 +69,9 @@ export function DashboardOverview({
           ? 'Connect PostHog, GitHub, and OpenAI to start turning replay evidence into loops.'
           : 'Evidence ranked by user pain, confidence, fix readiness, and learned team policy.'}
         action={
-          setupMode ? (
+          setupMode || demoMode ? (
             <div className="flex flex-wrap items-center gap-2">
-              <Pill tone="warning">Setup needed</Pill>
+              <Pill tone={demoMode ? 'accent' : 'warning'}>{demoMode ? 'Demo data' : 'Setup needed'}</Pill>
               <Link
                 href="/dashboard/settings"
                 className="ev-focus inline-flex min-h-10 items-center rounded-lg bg-[var(--ev-acid)] px-4 text-sm font-semibold text-[#11130b]"

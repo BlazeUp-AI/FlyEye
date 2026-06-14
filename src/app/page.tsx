@@ -37,7 +37,6 @@ const details = [
 const pricing = [
   {
     name: 'Starter',
-    originalPrice: '$399',
     price: '$99',
     detail: 'For one product team wiring its first quality loop.',
     features: ['10,000 sessions / month', '3 active signals', '3 custom filters', '30-day retention', 'All integrations', 'MCP and SDK access'],
@@ -219,12 +218,7 @@ export default function LandingPage() {
                   </span>
                 )}
                 <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
-                <div className="mt-5 flex flex-wrap items-end gap-x-2 gap-y-1">
-                  {'originalPrice' in plan && plan.originalPrice && (
-                    <span className="pb-1 text-lg font-medium tracking-normal text-[var(--ev-faint)] line-through">
-                      {plan.originalPrice}
-                    </span>
-                  )}
+                <div className="mt-5 flex items-end gap-1">
                   <span className="text-4xl font-semibold tracking-normal text-white">{plan.price}</span>
                   {plan.price !== 'Custom' && <span className="pb-1 text-sm text-[var(--ev-muted)]">/mo</span>}
                 </div>

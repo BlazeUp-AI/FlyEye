@@ -1,6 +1,7 @@
 import { createServerSupabase, createServiceSupabase } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { DashboardOverview } from '@/components/dashboard/overview'
+import { demoIssues, demoProjectId, demoStats } from '@/lib/demo-data'
 
 export default async function DashboardPage() {
   const supabase = await createServerSupabase()
@@ -20,7 +21,7 @@ export default async function DashboardPage() {
   const project = projects?.[0]
 
   if (!project) {
-    return <DashboardOverview stats={emptyStats} recentIssues={[]} projectId="" setupMode />
+    return <DashboardOverview stats={demoStats} recentIssues={demoIssues} projectId={demoProjectId} demoMode />
   }
 
   const { data: issues } = await db
@@ -35,23 +36,25 @@ export default async function DashboardPage() {
     .select('id, analysis_status')
     .eq('project_id', project.id)
 
-  const stats = {
-    totalSessions: sessions?.length ?? 0,
-    analyzedSessions: sessions?.filter(s => s.analysis_status === 'done').length ?? 0,
-    totalIssues: issues?.length ?? 0,
-    openIssues: issues?.filter(i => i.status === 'open').length ?? 0,
-    criticalIssues: issues?.filter(i => i.severity === 'critical').length ?? 0,
-    prsCreated: issues?.filter(i => i.pr_url).length ?? 0,
+  const realIssues = issues ?? []
+  const realSessions = sessions ?? []
+  const useDemoData = realIssues.length === 0 && realSessions.length === 0
+
+  const stats = useDemoData ? demoStats : {
+    totalSessions: realSessions.length,
+    analyzedSessions: realSessions.filter(s => s.analysis_status === 'done').length,
+    totalIssues: realIssues.length,
+    openIssues: realIssues.filter(i => i.status === 'open').length,
+    criticalIssues: realIssues.filter(i => i.severity === 'critical').length,
+    prsCreated: realIssues.filter(i => i.pr_url).length,
   }
 
-  return <DashboardOverview stats={stats} recentIssues={issues ?? []} projectId={project.id} />
-}
-
-const emptyStats = {
-  totalSessions: 0,
-  analyzedSessions: 0,
-  totalIssues: 0,
-  openIssues: 0,
-  criticalIssues: 0,
-  prsCreated: 0,
+  return (
+    <DashboardOverview
+      stats={stats}
+      recentIssues={useDemoData ? demoIssues : realIssues}
+      projectId={useDemoData ? demoProjectId : project.id}
+      demoMode={useDemoData}
+    />
+  )
 }

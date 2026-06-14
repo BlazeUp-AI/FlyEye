@@ -6,7 +6,15 @@ import { Plus, Zap } from 'lucide-react'
 import type { Signal } from '@/lib/types'
 import { EmptyState, PageHeader, Panel, PanelHeader, Pill } from '@/components/dashboard/ui'
 
-export function SignalsPage({ signals: initialSignals, projectId }: { signals: Signal[]; projectId: string }) {
+export function SignalsPage({
+  signals: initialSignals,
+  projectId,
+  demoMode = false,
+}: {
+  signals: Signal[]
+  projectId: string
+  demoMode?: boolean
+}) {
   const [signals, setSignals] = useState(initialSignals)
   const [showForm, setShowForm] = useState(false)
   const [name, setName] = useState('')
@@ -15,6 +23,7 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
 
   async function createSignal(e: FormEvent) {
     e.preventDefault()
+    if (demoMode) return
     setSaving(true)
 
     const res = await fetch('/api/signals', {
@@ -40,13 +49,17 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
         title="Learning rules"
         description="Team-defined signals and feedback patterns that teach FlyEye what product failures matter."
         action={
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="ev-focus inline-flex min-h-10 items-center gap-2 rounded bg-[var(--ev-acid)] px-4 text-sm font-semibold text-[#11130b]"
-          >
-            <Plus size={16} />
-            New learning
-          </button>
+          demoMode ? (
+            <Pill tone="accent">Demo data</Pill>
+          ) : (
+            <button
+              onClick={() => setShowForm(!showForm)}
+              className="ev-focus inline-flex min-h-10 items-center gap-2 rounded bg-[var(--ev-acid)] px-4 text-sm font-semibold text-[#11130b]"
+            >
+              <Plus size={16} />
+              New learning
+            </button>
+          )
         }
       />
 

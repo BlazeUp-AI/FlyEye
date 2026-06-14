@@ -28,7 +28,7 @@ export function Sidebar() {
     <aside className="fixed inset-x-0 top-0 z-40 flex h-auto border-b border-white/[0.05] bg-[rgba(11,13,11,0.86)] backdrop-blur-xl lg:inset-y-0 lg:left-0 lg:h-screen lg:w-64 lg:flex-col lg:border-b-0 lg:border-r">
       <div className="flex min-w-40 items-center gap-3 border-r border-white/[0.05] px-4 py-3 lg:block lg:border-r-0 lg:border-b lg:p-5">
         <h1 className="font-display text-2xl font-semibold uppercase leading-[0.85] tracking-normal text-[var(--ev-text)] lg:text-3xl">
-          Exter<br className="hidden lg:block" />Vision
+          Fly<br className="hidden lg:block" />Eye
         </h1>
         <p className="hidden font-data mt-1 text-[10px] uppercase tracking-normal text-[var(--ev-muted)] sm:block">Closed-loop quality</p>
       </div>
