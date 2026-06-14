@@ -9,14 +9,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [resending, setResending] = useState(false)
+  const [resendMessage, setResendMessage] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setResendMessage('')
 
     const supabase = createBrowserSupabase()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    })
 
     if (error) {
       setError(error.message)
@@ -25,6 +31,30 @@ export default function LoginPage() {
       window.location.href = '/dashboard'
     }
   }
+
+  async function resendConfirmation() {
+    setResending(true)
+    setError('')
+    setResendMessage('')
+
+    const supabase = createBrowserSupabase()
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email.trim().toLowerCase(),
+      options: {
+        emailRedirectTo: `${window.location.origin}/callback`,
+      },
+    })
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setResendMessage('Confirmation email sent again. Check inbox and spam.')
+    }
+    setResending(false)
+  }
+
+  const canResendConfirmation = error.toLowerCase().includes('email not confirmed') && email.trim().length > 0
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#090a08] px-4">
@@ -38,6 +68,12 @@ export default function LoginPage() {
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm">
               {error}
+            </div>
+          )}
+
+          {resendMessage && (
+            <div className="rounded-lg border border-[rgba(111,227,161,0.22)] bg-[rgba(111,227,161,0.1)] p-3 text-sm text-[var(--ev-success)]">
+              {resendMessage}
             </div>
           )}
 
@@ -72,6 +108,17 @@ export default function LoginPage() {
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
+
+          {canResendConfirmation && (
+            <button
+              type="button"
+              onClick={resendConfirmation}
+              disabled={resending}
+              className="w-full rounded-lg border border-white/[0.09] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/[0.04] disabled:opacity-50"
+            >
+              {resending ? 'Sending confirmation...' : 'Resend confirmation email'}
+            </button>
+          )}
         </form>
 
         <p className="mt-6 text-center text-sm text-zinc-500">

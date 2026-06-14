@@ -10,21 +10,59 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [resending, setResending] = useState(false)
+  const [resendMessage, setResendMessage] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setResendMessage('')
 
     const supabase = createBrowserSupabase()
-    const { error } = await supabase.auth.signUp({ email, password })
+    const normalizedEmail = email.trim().toLowerCase()
+    const { data, error } = await supabase.auth.signUp({
+      email: normalizedEmail,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/callback`,
+      },
+    })
 
     if (error) {
       setError(error.message)
       setLoading(false)
     } else {
+      setEmail(normalizedEmail)
+      if (data.session) {
+        window.location.href = '/dashboard'
+        return
+      }
       setSuccess(true)
+      setLoading(false)
     }
+  }
+
+  async function resendConfirmation() {
+    setResending(true)
+    setError('')
+    setResendMessage('')
+
+    const supabase = createBrowserSupabase()
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/callback`,
+      },
+    })
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setResendMessage('Confirmation email sent again. Check inbox and spam.')
+    }
+    setResending(false)
   }
 
   if (success) {
@@ -32,7 +70,31 @@ export default function SignupPage() {
       <div className="flex min-h-screen items-center justify-center bg-[#090a08] px-4">
         <div className="w-full max-w-sm text-center">
           <h1 className="text-2xl font-bold text-white mb-2">Check your email</h1>
-          <p className="text-zinc-400">We sent a confirmation link to {email}</p>
+          <p className="text-zinc-400">We requested a confirmation link for {email}.</p>
+          <p className="mt-3 text-sm leading-6 text-zinc-500">
+            It can take a minute. Check spam or promotions if it does not show up.
+          </p>
+
+          {error && (
+            <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
+          {resendMessage && (
+            <div className="mt-4 rounded-lg border border-[rgba(111,227,161,0.22)] bg-[rgba(111,227,161,0.1)] p-3 text-sm text-[var(--ev-success)]">
+              {resendMessage}
+            </div>
+          )}
+
+          <button
+            onClick={resendConfirmation}
+            disabled={resending}
+            className="mt-5 w-full rounded-lg bg-[var(--ev-acid)] py-2.5 font-semibold text-[#11130b] transition-colors hover:bg-[#e3ff81] disabled:opacity-50"
+          >
+            {resending ? 'Sending...' : 'Resend confirmation email'}
+          </button>
+
           <Link href="/login" className="mt-4 inline-block text-sm text-[var(--ev-acid)] hover:text-[#e3ff81]">
             Back to login
           </Link>

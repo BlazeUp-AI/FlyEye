@@ -182,6 +182,13 @@ Set these environment variables in Vercel:
 - `CRON_SECRET`
 - `NEXT_PUBLIC_APP_URL`
 
+Supabase Auth must also allow the deployed callback URL:
+
+- Site URL: your production FlyEye URL
+- Redirect URL: `https://your-domain.com/callback`
+
+For production signups, configure a real SMTP provider in Supabase Auth. Supabase's default email sender is useful for development but can be rate-limited or less reliable for production delivery.
+
 ## AI Behavior
 
 The session analyzer currently sends a text prompt containing:
