@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { ArrowLeft, ExternalLink, GitPullRequest, ThumbsDown, ThumbsUp, Wrench } from 'lucide-react'
 import type { Issue } from '@/lib/types'
 import Link from 'next/link'
@@ -183,7 +184,7 @@ function Event({ label, value }: { label: string; value: string }) {
   )
 }
 
-function DetailBlock({ title, children }: { title: string; children: React.ReactNode }) {
+function DetailBlock({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
       <h3 className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">{title}</h3>
@@ -192,7 +193,7 @@ function DetailBlock({ title, children }: { title: string; children: React.React
   )
 }
 
-function LedgerItem({ label, children }: { label: string; children: React.ReactNode }) {
+function LedgerItem({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="p-4">
       <p className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-acid)]">{label}</p>

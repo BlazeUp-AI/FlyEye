@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Zap, Plus, Trash2 } from 'lucide-react'
+import type { FormEvent } from 'react'
+import { Plus, Zap } from 'lucide-react'
 import type { Signal } from '@/lib/types'
+import { EmptyState, PageHeader, Panel, PanelHeader, Pill } from '@/components/dashboard/ui'
 
 export function SignalsPage({ signals: initialSignals, projectId }: { signals: Signal[]; projectId: string }) {
   const [signals, setSignals] = useState(initialSignals)
@@ -11,7 +13,7 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
   const [description, setDescription] = useState('')
   const [saving, setSaving] = useState(false)
 
-  async function createSignal(e: React.FormEvent) {
+  async function createSignal(e: FormEvent) {
     e.preventDefault()
     setSaving(true)
 
@@ -32,56 +34,53 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
   }
 
   return (
-    <div className="max-w-2xl">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Signals</h1>
-          <p className="text-zinc-400 text-sm mt-1">Custom patterns the AI watches for in sessions</p>
-        </div>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-lg transition-colors"
-        >
-          <Plus size={16} />
-          New Signal
-        </button>
-      </div>
+    <div className="pt-20 md:pt-0">
+      <PageHeader
+        eyebrow="ExterVision / Learnings"
+        title="Learning rules"
+        description="Team-defined signals and feedback patterns that teach ExterVision what product failures matter."
+        action={
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="ev-focus inline-flex min-h-10 items-center gap-2 rounded bg-[var(--ev-acid)] px-4 text-sm font-semibold text-[#11130b]"
+          >
+            <Plus size={16} />
+            New learning
+          </button>
+        }
+      />
 
       {showForm && (
-        <form onSubmit={createSignal} className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-6 space-y-4">
+        <form onSubmit={createSignal} className="ev-panel mb-5 space-y-4 p-5">
+          <Field
+            label="Learning name"
+            value={name}
+            onChange={setName}
+            placeholder="Checkout abandonment"
+          />
           <div>
-            <label className="block text-sm text-zinc-400 mb-1.5">Signal Name</label>
-            <input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required
-              placeholder="Checkout abandonment"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-zinc-400 mb-1.5">Description (what to watch for)</label>
+            <label className="mb-1.5 block font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">What ExterVision should watch for</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
               required
-              placeholder="User visits pricing page, clicks upgrade, but never completes checkout within the session"
+              placeholder="User visits pricing, clicks upgrade, but never completes checkout within the session"
               rows={3}
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
+              className="ev-focus w-full resize-none rounded border border-[var(--ev-border)] bg-[var(--ev-surface-raised)] px-3 py-2 text-sm text-[var(--ev-text)] placeholder:text-[var(--ev-faint)]"
             />
           </div>
           <div className="flex gap-3">
             <button
               type="submit"
               disabled={saving}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm rounded-lg transition-colors"
+              className="ev-focus min-h-10 rounded bg-[var(--ev-acid)] px-4 text-sm font-semibold text-[#11130b] disabled:opacity-50"
             >
-              {saving ? 'Creating...' : 'Create Signal'}
+              {saving ? 'Creating...' : 'Create learning'}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm rounded-lg transition-colors"
+              className="ev-focus min-h-10 rounded border border-[var(--ev-border)] px-4 text-sm text-[var(--ev-text)] hover:bg-white/[0.04]"
             >
               Cancel
             </button>
@@ -90,26 +89,47 @@ export function SignalsPage({ signals: initialSignals, projectId }: { signals: S
       )}
 
       {signals.length === 0 ? (
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center">
-          <Zap size={32} className="text-zinc-600 mx-auto mb-3" />
-          <p className="text-zinc-400">No signals configured. Create one to teach the AI what to watch for.</p>
-        </div>
+        <EmptyState
+          title="No learning rules"
+          description="Create a signal to teach ExterVision what to watch for in replay evidence."
+        />
       ) : (
-        <div className="space-y-2">
-          {signals.map(signal => (
-            <div key={signal.id} className="flex items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-              <Zap size={16} className={signal.is_active ? 'text-yellow-400' : 'text-zinc-600'} />
-              <div className="flex-1">
-                <p className="text-sm text-white">{signal.name}</p>
-                <p className="text-xs text-zinc-500 mt-0.5">{signal.description}</p>
+        <Panel>
+          <PanelHeader label="Active learning memory" value={`${signals.length} rules`} />
+          <div className="divide-y divide-[var(--ev-border)]">
+            {signals.map(signal => (
+              <div key={signal.id} className="grid gap-3 px-3 py-3 md:grid-cols-[26px_minmax(0,1fr)_96px] md:items-center">
+                <Zap size={16} className={signal.is_active ? 'text-[var(--ev-acid)]' : 'text-[var(--ev-faint)]'} />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-[var(--ev-text)]">{signal.name}</p>
+                  <p className="mt-1 truncate text-xs text-[var(--ev-muted)]">{signal.description}</p>
+                </div>
+                <Pill tone={signal.is_active ? 'success' : 'neutral'}>{signal.is_active ? 'active' : 'paused'}</Pill>
               </div>
-              <span className={`text-xs px-2 py-0.5 rounded ${signal.is_active ? 'bg-green-500/10 text-green-400' : 'bg-zinc-700/50 text-zinc-500'}`}>
-                {signal.is_active ? 'active' : 'paused'}
-              </span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Panel>
       )}
+    </div>
+  )
+}
+
+function Field({ label, value, onChange, placeholder }: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+  placeholder?: string
+}) {
+  return (
+    <div>
+      <label className="mb-1.5 block font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">{label}</label>
+      <input
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        required
+        placeholder={placeholder}
+        className="ev-focus w-full rounded border border-[var(--ev-border)] bg-[var(--ev-surface-raised)] px-3 py-2 text-sm text-[var(--ev-text)] placeholder:text-[var(--ev-faint)]"
+      />
     </div>
   )
 }
