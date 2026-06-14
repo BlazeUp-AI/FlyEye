@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         .select('posthog_recording_id')
         .eq('project_id', project.id)
 
-      const existingIds = new Set((existing ?? []).map((s: { posthog_recording_id: string }) => s.posthog_recording_id))
+      const existingIds = new Set<string>((existing ?? []).map((s: { posthog_recording_id: string }) => s.posthog_recording_id))
       const newSessions = await client.syncRecordings(existingIds)
 
       if (newSessions.length > 0) {
