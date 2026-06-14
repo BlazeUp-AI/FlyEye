@@ -29,11 +29,11 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-[#090a08] px-4">
         <div className="w-full max-w-sm text-center">
           <h1 className="text-2xl font-bold text-white mb-2">Check your email</h1>
           <p className="text-zinc-400">We sent a confirmation link to {email}</p>
-          <Link href="/login" className="text-blue-400 hover:text-blue-300 text-sm mt-4 inline-block">
+          <Link href="/login" className="mt-4 inline-block text-sm text-[var(--ev-acid)] hover:text-[#e3ff81]">
             Back to login
           </Link>
         </div>
@@ -42,11 +42,11 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#090a08] px-4">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-white">FlyVision</h1>
-          <p className="text-zinc-400 mt-2">Create your account</p>
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-semibold text-white">ExterVision</h1>
+          <p className="mt-2 text-zinc-400">Create your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -63,7 +63,7 @@ export default function SignupPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              className="w-full rounded-lg border border-white/[0.09] bg-[#11120f] px-3 py-2 text-white placeholder-zinc-500 focus:border-[var(--ev-acid)] focus:outline-none focus:ring-2 focus:ring-[rgba(215,255,95,0.2)]"
               placeholder="you@company.com"
             />
           </div>
@@ -76,7 +76,7 @@ export default function SignupPage() {
               onChange={e => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              className="w-full rounded-lg border border-white/[0.09] bg-[#11120f] px-3 py-2 text-white placeholder-zinc-500 focus:border-[var(--ev-acid)] focus:outline-none focus:ring-2 focus:ring-[rgba(215,255,95,0.2)]"
               placeholder="••••••••"
             />
           </div>
@@ -84,15 +84,15 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium rounded-lg transition-colors"
+            className="w-full rounded-lg bg-[var(--ev-acid)] py-2.5 font-semibold text-[#11130b] transition-colors hover:bg-[#e3ff81] disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Create account'}
           </button>
         </form>
 
-        <p className="text-center text-zinc-500 text-sm mt-6">
+        <p className="mt-6 text-center text-sm text-zinc-500">
           Already have an account?{' '}
-          <Link href="/login" className="text-blue-400 hover:text-blue-300">Sign in</Link>
+          <Link href="/login" className="text-[var(--ev-acid)] hover:text-[#e3ff81]">Sign in</Link>
         </p>
       </div>
     </div>
