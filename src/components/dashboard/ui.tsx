@@ -13,10 +13,10 @@ export function PageHeader({
   action?: ReactNode
 }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <p className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-acid)]">{eyebrow}</p>
-        <h1 className="font-display mt-2 text-5xl font-semibold uppercase leading-[0.9] tracking-normal text-[var(--ev-text)] md:text-6xl">
+        <h1 className="font-display mt-2 text-5xl font-semibold uppercase leading-[0.9] tracking-normal text-[var(--ev-text)] md:text-7xl">
           {title}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--ev-muted)]">{description}</p>
@@ -44,7 +44,7 @@ export function PanelHeader({
   value?: string
 }) {
   return (
-    <div className="flex min-h-11 items-center justify-between gap-3 border-b border-[var(--ev-border)] px-3">
+    <div className="flex min-h-12 items-center justify-between gap-3 px-5">
       <span className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">{label}</span>
       {value && <span className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">{value}</span>}
     </div>
@@ -63,7 +63,7 @@ export function Pill({
   return (
     <span
       className={clsx(
-        'inline-flex min-h-6 items-center rounded px-2 font-data text-[11px] font-medium uppercase tracking-normal',
+        'inline-flex min-h-6 items-center rounded-full px-2.5 font-data text-[11px] font-medium uppercase tracking-normal',
         tone === 'neutral' && 'bg-white/[0.04] text-[var(--ev-muted)] ring-1 ring-white/[0.08]',
         tone === 'accent' && 'bg-[rgba(215,255,95,0.12)] text-[var(--ev-acid)] ring-1 ring-[rgba(215,255,95,0.22)]',
         tone === 'success' && 'bg-[rgba(111,227,161,0.12)] text-[var(--ev-success)] ring-1 ring-[rgba(111,227,161,0.22)]',

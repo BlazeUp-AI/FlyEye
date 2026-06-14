@@ -7,8 +7,8 @@
   --ev-bg-soft: #10100e;
   --ev-surface: #141511;
   --ev-surface-raised: #191812;
-  --ev-border: rgba(244, 241, 234, 0.12);
-  --ev-border-strong: rgba(244, 241, 234, 0.18);
+  --ev-border: rgba(244, 241, 234, 0.055);
+  --ev-border-strong: rgba(244, 241, 234, 0.1);
   --ev-text: #f4f1ea;
   --ev-muted: #9c9588;
   --ev-faint: #6f695f;
@@ -27,7 +27,10 @@
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(215, 255, 95, 0.075), transparent 28%),
+    radial-gradient(circle at 88% 6%, rgba(114, 167, 255, 0.055), transparent 24%),
+    linear-gradient(180deg, #0b0d0b 0%, #0e0f0c 48%, #0b0d0b 100%);
   color: var(--foreground);
   font-family: var(--font-plex-sans), sans-serif;
 }
@@ -46,14 +49,20 @@ body {
 
 .ev-panel {
   border: 1px solid var(--ev-border);
-  background: var(--ev-surface);
-  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(215, 255, 95, 0.055), transparent 34%),
+    linear-gradient(145deg, rgba(244, 241, 234, 0.04), rgba(244, 241, 234, 0.014) 42%, rgba(215, 255, 95, 0.014)),
+    var(--ev-surface);
+  border-radius: 28px;
+  box-shadow: 0 26px 90px rgba(0, 0, 0, 0.2);
 }
 
 .ev-panel-raised {
   border: 1px solid var(--ev-border);
-  background: var(--ev-surface-raised);
-  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(244, 241, 234, 0.06), rgba(244, 241, 234, 0.02)),
+    var(--ev-surface-raised);
+  border-radius: 24px;
 }
 
 .ev-grid-bg {

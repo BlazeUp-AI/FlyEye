@@ -15,7 +15,17 @@ type Stats = {
   prsCreated: number
 }
 
-export function DashboardOverview({ stats, recentIssues, projectId }: { stats: Stats; recentIssues: Issue[]; projectId: string }) {
+export function DashboardOverview({
+  stats,
+  recentIssues,
+  projectId,
+  setupMode = false,
+}: {
+  stats: Stats
+  recentIssues: Issue[]
+  projectId: string
+  setupMode?: boolean
+}) {
   const [syncing, setSyncing] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
   const [agentRunning, setAgentRunning] = useState(false)
@@ -53,40 +63,54 @@ export function DashboardOverview({ stats, recentIssues, projectId }: { stats: S
       <PageHeader
         eyebrow="ExterVision / Loop inbox"
         title="Loop inbox"
-        description="Evidence ranked by user pain, confidence, fix readiness, and learned team policy."
+        description={setupMode
+          ? 'Connect PostHog, GitHub, and OpenAI to start turning replay evidence into loops.'
+          : 'Evidence ranked by user pain, confidence, fix readiness, and learned team policy.'}
         action={
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={async () => {
-                setAgentRunning(true)
-                setSyncResult(null)
-                const res = await fetch('/api/agent/start', { method: 'POST' })
-                const data = await res.json()
-                setSyncResult(data.message ?? 'Agent started')
-              }}
-              disabled={agentRunning}
-              className="ev-focus inline-flex min-h-10 items-center gap-2 rounded bg-[var(--ev-acid)] px-4 text-sm font-semibold text-[#11130b] disabled:opacity-50"
-            >
-              <Power size={16} className={agentRunning ? 'animate-pulse' : ''} />
-              {agentRunning ? 'Watching' : 'Start watch'}
-            </button>
-            <button
-              onClick={handleSync}
-              disabled={syncing}
-              className="ev-focus inline-flex min-h-10 items-center gap-2 rounded border border-[var(--ev-border)] px-4 text-sm text-[var(--ev-text)] transition-colors hover:bg-white/[0.04] disabled:opacity-50"
-            >
-              <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
-              Sync replays
-            </button>
-            <button
-              onClick={handleAnalyze}
-              disabled={analyzing}
-              className="ev-focus inline-flex min-h-10 items-center gap-2 rounded border border-[var(--ev-border)] px-4 text-sm text-[var(--ev-text)] transition-colors hover:bg-white/[0.04] disabled:opacity-50"
-            >
-              <Zap size={16} className={analyzing ? 'animate-pulse' : ''} />
-              Analyze loops
-            </button>
-          </div>
+          setupMode ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <Pill tone="warning">Setup needed</Pill>
+              <Link
+                href="/dashboard/settings"
+                className="ev-focus inline-flex min-h-10 items-center rounded-full bg-[var(--ev-acid)] px-5 text-sm font-semibold text-[#11130b]"
+              >
+                Connect sources
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={async () => {
+                  setAgentRunning(true)
+                  setSyncResult(null)
+                  const res = await fetch('/api/agent/start', { method: 'POST' })
+                  const data = await res.json()
+                  setSyncResult(data.message ?? 'Agent started')
+                }}
+                disabled={agentRunning}
+                className="ev-focus inline-flex min-h-10 items-center gap-2 rounded-full bg-[var(--ev-acid)] px-5 text-sm font-semibold text-[#11130b] disabled:opacity-50"
+              >
+                <Power size={16} className={agentRunning ? 'animate-pulse' : ''} />
+                {agentRunning ? 'Watching' : 'Start watch'}
+              </button>
+              <button
+                onClick={handleSync}
+                disabled={syncing}
+                className="ev-focus inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--ev-border)] px-5 text-sm text-[var(--ev-text)] transition-colors hover:bg-white/[0.04] disabled:opacity-50"
+              >
+                <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
+                Sync replays
+              </button>
+              <button
+                onClick={handleAnalyze}
+                disabled={analyzing}
+                className="ev-focus inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--ev-border)] px-5 text-sm text-[var(--ev-text)] transition-colors hover:bg-white/[0.04] disabled:opacity-50"
+              >
+                <Zap size={16} className={analyzing ? 'animate-pulse' : ''} />
+                Analyze loops
+              </button>
+            </div>
+          )
         }
       />
 
@@ -96,12 +120,14 @@ export function DashboardOverview({ stats, recentIssues, projectId }: { stats: S
         </div>
       )}
 
-      <div className="mb-5 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-        <Metric icon={Monitor} label="Observed" value={stats.totalSessions} detail={`${stats.analyzedSessions} analyzed`} />
-        <Metric icon={Bug} label="Loops" value={stats.totalIssues} detail={`${stats.openIssues} open`} />
-        <Metric icon={AlertTriangle} label="Critical" value={stats.criticalIssues} detail="needs owner" tone="danger" />
-        <Metric icon={GitPullRequest} label="PR ready" value={stats.prsCreated} detail="auto-generated" tone="success" />
-      </div>
+      {!setupMode && (
+        <div className="mb-6 grid gap-3 rounded-[28px] bg-white/[0.025] p-3 ring-1 ring-white/[0.045] sm:grid-cols-2 xl:grid-cols-4">
+          <Metric icon={Monitor} label="Observed" value={stats.totalSessions} detail={`${stats.analyzedSessions} analyzed`} />
+          <Metric icon={Bug} label="Loops" value={stats.totalIssues} detail={`${stats.openIssues} open`} />
+          <Metric icon={AlertTriangle} label="Critical" value={stats.criticalIssues} detail="needs owner" tone="danger" />
+          <Metric icon={GitPullRequest} label="PR ready" value={stats.prsCreated} detail="auto-generated" tone="success" />
+        </div>
+      )}
 
       {primaryIssue ? (
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -170,8 +196,10 @@ export function DashboardOverview({ stats, recentIssues, projectId }: { stats: S
         </div>
       ) : (
         <EmptyState
-          title="No loops detected yet"
-          description="Sync PostHog sessions and run analysis. ExterVision will turn replay evidence into diagnosis, feedback, PRs, and memory updates."
+          title={setupMode ? 'Connect sources to start the loop' : 'No loops detected yet'}
+          description={setupMode
+            ? 'Wire PostHog for replay evidence, GitHub for PRs, and OpenAI for diagnosis before ExterVision starts watching.'
+            : 'Sync PostHog sessions and run analysis. ExterVision will turn replay evidence into diagnosis, feedback, PRs, and memory updates.'}
         />
       )}
     </div>
@@ -180,7 +208,7 @@ export function DashboardOverview({ stats, recentIssues, projectId }: { stats: S
 
 function Metric({ icon: Icon, label, value, detail, tone = 'neutral' }: { icon: typeof Monitor; label: string; value: number; detail: string; tone?: 'neutral' | 'danger' | 'success' }) {
   return (
-    <div className="ev-panel min-h-24 p-3">
+    <div className="min-h-24 rounded-[22px] px-3 py-2 transition-colors hover:bg-white/[0.025]">
       <div className="flex items-center gap-2">
         <Icon size={16} className={tone === 'danger' ? 'text-[var(--ev-danger)]' : tone === 'success' ? 'text-[var(--ev-success)]' : 'text-[var(--ev-muted)]'} />
         <span className="font-data text-[11px] uppercase tracking-normal text-[var(--ev-muted)]">{label}</span>

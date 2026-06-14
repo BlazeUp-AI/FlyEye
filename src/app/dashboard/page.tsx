@@ -5,7 +5,9 @@ import { DashboardOverview } from '@/components/dashboard/overview'
 export default async function DashboardPage() {
   const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) {
+    redirect('/login')
+  }
 
   const db = createServiceSupabase()
 
@@ -18,7 +20,7 @@ export default async function DashboardPage() {
   const project = projects?.[0]
 
   if (!project) {
-    redirect('/dashboard/settings')
+    return <DashboardOverview stats={emptyStats} recentIssues={[]} projectId="" setupMode />
   }
 
   const { data: issues } = await db
@@ -43,4 +45,13 @@ export default async function DashboardPage() {
   }
 
   return <DashboardOverview stats={stats} recentIssues={issues ?? []} projectId={project.id} />
+}
+
+const emptyStats = {
+  totalSessions: 0,
+  analyzedSessions: 0,
+  totalIssues: 0,
+  openIssues: 0,
+  criticalIssues: 0,
+  prsCreated: 0,
 }
